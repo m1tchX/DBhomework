@@ -1,0 +1,31 @@
+-- Задача: Подсчитать суммарный срок службы в месяцах (ServiceType.service_term_months) всех числящихся военнослужащих по подразделениям (Unit.name).
+-- Вариант решения:
+
+SELECT 
+    u.name AS UnitName,
+    SUM(st.service_term_months) AS TotalServiceMonths
+FROM 
+    Soldier AS s,
+    Unit AS u,
+    ServiceType AS st,
+    ServesIn AS si,
+    HasServiceType AS hst
+WHERE 
+    MATCH(s-(si)->u) AND
+    MATCH(s-(hst)->st)
+GROUP BY 
+    u.name
+ORDER BY 
+    TotalServiceMonths DESC;
+
+-- Выходные данные:
+UnitName                                TotalServiceMonths
+----------------------------------------------------------
+2-й стрелковый взвод (1-й роты)         72
+Управление воинской части               60
+1-я мотострелковая рота                 60
+Танковый батальон                       60
+1-й стрелковый взвод (1-й роты)         48
+Разведывательный взвод                  24
+Взвод материального обеспечения         24
+1-я танковая рота                       6
